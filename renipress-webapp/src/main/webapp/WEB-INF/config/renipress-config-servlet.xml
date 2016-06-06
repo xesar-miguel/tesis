@@ -1,0 +1,400 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:jee="http://www.springframework.org/schema/jee"
+	xsi:schemaLocation="
+           http://www.springframework.org/schema/beans   http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+           http://www.springframework.org/schema/tx      http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+           http://www.springframework.org/schema/aop     http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+           http://www.springframework.org/schema/jee     http://www.springframework.org/schema/jee/spring-jee-3.0.xsd">
+
+	<import resource="renipress-config-app.xml" />
+
+	<context:annotation-config />
+	<context:component-scan
+		base-package="pe.gob.susalud.renipress,pe.gob.susalud.renipress.negocio,pe.gob.susalud.renipress.dao" />
+
+	<!-- beans para configurar los controladores -->
+	<bean id="viewResolver"
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver"
+		p:prefix="/WEB-INF/jsp/" p:suffix=".jsp" />
+
+	<bean id="paramResolver"
+		class="org.springframework.web.servlet.mvc.multiaction.ParameterMethodNameResolver"
+		p:paramName="action" />
+
+	<!-- controladores -->
+
+	<!-- MODULO CATEGORIZACION -->
+	<bean name="/categorizacion.htm"
+		class="pe.gob.susalud.renipress.controladores.CategorizacionController">
+		<property name="methodNameResolver" ref="paramResolver" />
+	</bean>
+	<!-- MODULO TAREA -->
+	<bean name="/tarea.htm"
+		class="pe.gob.susalud.renipress.controladores.TareaController">
+		<property name="methodNameResolver" ref="paramResolver" />
+	</bean>
+
+	<!-- ADMISIBILIDAD -->
+	<bean name="/admisibilidad.htm"
+		class="pe.gob.susalud.renipress.controladores.AdmisibilidadController">
+		<property name="methodNameResolver" ref="paramResolver" />
+	</bean>
+
+	<!-- EVALUACIÓN DE SOLICITUD -->
+	<bean name="/evaluacion-solicitud.htm"
+		class="pe.gob.susalud.renipress.controladores.EvaluacionSolicitudAdmitidasController">
+		<property name="methodNameResolver" ref="paramResolver" />
+	</bean>
+
+	<!-- UBIGEO -->
+	<bean name="/ubigeo.htm"
+		class="pe.gob.susalud.renipress.controladores.utiles.UbigeoController">
+		<property name="methodNameResolver" ref="paramResolver" />
+	</bean>
+
+	<!-- RED -->
+	<bean name="/red.htm"
+		class="pe.gob.susalud.renipress.controladores.utiles.RedController">
+		<property name="methodNameResolver" ref="paramResolver" />
+	</bean>
+	
+	<!-- ESTADO -->
+	<bean name="/estado.htm"
+		class="pe.gob.susalud.renipress.controladores.utiles.EstadoController">
+		<property name="methodNameResolver" ref="paramResolver" />
+	</bean>
+
+	<bean name="/login.htm"
+		class="pe.gob.susalud.renipress.controladores.LoginController">
+		<property name="methodNameResolver" ref="paramResolver" />
+	</bean>
+
+	<!-- MODULO NORMAS -->
+	<!-- controladores para configuracion de normas -->
+	<bean name="/normas.htm"
+		class="pe.gob.susalud.renipress.controladores.CategorizacionNormaController">
+		<property name="methodNameResolver" ref="paramResolver" />
+	</bean>
+	<!-- controladores para configuracion de normas nuevo -->
+	<bean name="/normasNuevo.htm"
+		class="pe.gob.susalud.renipress.controladores.CategorizacionNormaController">
+		<property name="methodNameResolver" ref="paramResolver" />
+	</bean>
+
+	<!-- MODULO ACTIVIDAD -->
+	<!-- controladores para configuracion de normas -->
+	<bean name="/actividades.htm"
+		class="pe.gob.susalud.renipress.controladores.CategorizacionActividadController">
+		<property name="methodNameResolver" ref="paramResolver" />
+	</bean>
+
+	<!-- MODULO CATEGORIA -->
+	<!-- controladores para configuracion de categoria -->
+	<bean name="/categorias.htm"
+		class="pe.gob.susalud.renipress.controladores.CategorizacionCategoriaController">
+		<property name="methodNameResolver" ref="paramResolver" />
+	</bean>
+
+	<!-- MODULO MODULO -->
+	<!-- controladores para configuracion de categoria -->
+	<bean name="/modulos.htm"
+		class="pe.gob.susalud.renipress.controladores.CategorizacionModuloController">
+		<property name="methodNameResolver" ref="paramResolver" />
+	</bean>
+
+	<!-- MODULO UPSS -->
+	<!-- controladores para configuracion de upss -->
+	<bean name="/upss.htm"
+		class="pe.gob.susalud.renipress.controladores.CategorizacionUPSSController">
+		<property name="methodNameResolver" ref="paramResolver" />
+	</bean>
+
+	<!-- MODULO REQUISITOS DOCUMENTOS -->
+	<!-- controladores para configuracion de requisitos de documentos -->
+	<bean name="/reqdocumentos.htm"
+		class="pe.gob.susalud.renipress.controladores.CategorizacionDocumReqController">
+		<property name="methodNameResolver" ref="paramResolver" />
+	</bean>
+
+	<!-- MODULO REQUISITOS -->
+	<!-- controladores para configuracion de requisitos -->
+	<bean name="/requisitos.htm"
+		class="pe.gob.susalud.renipress.controladores.CategorizacionRequisitoController">
+		<property name="methodNameResolver" ref="paramResolver" />
+	</bean>
+
+	<!-- MODULO REGLAS -->
+	<!-- controladores para configuracion de reglas -->
+	<bean name="/reglas.htm"
+		class="pe.gob.susalud.renipress.controladores.CategorizacionReglaController">
+		<property name="methodNameResolver" ref="paramResolver" />
+	</bean>
+
+
+	<bean name="/solicitudUsuario.htm"
+		class="pe.gob.susalud.renipress.controladores.SolicitudUsuarioController">
+		<property name="methodNameResolver" ref="paramResolver" />
+	</bean>
+
+	<bean name="/solicitud.htm"
+		class="pe.gob.susalud.renipress.controladores.SolicitudController">
+		<property name="methodNameResolver" ref="paramResolver" />
+	</bean>
+	
+	<bean name="/solicitudActualizar.htm"
+		class="pe.gob.susalud.renipress.controladores.IpressActualizarController">
+		<property name="methodNameResolver" ref="paramResolver" />
+	</bean>
+	
+	
+
+	<!-- MODULO CONSULTA TRAMITE -->
+	<bean name="/consultaTramite.htm"
+		class="pe.gob.susalud.renipress.controladores.CategorizacionConsultaTramiteController">
+		<property name="methodNameResolver" ref="paramResolver" />
+	</bean>
+
+	<!-- MODULO CONSULTA REQUERIMIENTO -->
+	<bean name="/consultaRequerimiento.htm"
+		class="pe.gob.susalud.renipress.controladores.CategorizacionReqDocumentoController">
+		<property name="methodNameResolver" ref="paramResolver" />
+	</bean>
+
+	<!-- MODULO CONSULTA ADMISIBILIDAD -->
+	<bean name="/consultaAdmisibilidad.htm"
+		class="pe.gob.susalud.renipress.controladores.CategorizacionConsultaAdmisibilidadController">
+		<property name="methodNameResolver" ref="paramResolver" />
+	</bean>
+
+	<!-- MODULO CONSULTA SOLICITUD DE CATEGORIZACION -->
+	<bean name="/consultaSolicitudCategorizacion.htm"
+		class="pe.gob.susalud.renipress.controladores.CategorizacionConsultaSolicitudCategController">
+		<property name="methodNameResolver" ref="paramResolver" />
+	</bean>
+
+	<!-- MODULO SEGURIDAD -->
+	
+	<bean name="/captcha.htm"
+		class="pe.gob.susalud.renipress.controladores.CaptchaController">
+		<property name="methodNameResolver" ref="paramResolver" />
+	</bean>
+
+	<!-- MODULO EVALUACION DE SOLICITUD DE CATEGORIZACION -->
+	<bean name="/admitir-categorizacion.htm"
+		class="pe.gob.susalud.renipress.controladores.AdmitirSolicitudCategorizacion">
+		<property name="methodNameResolver" ref="paramResolver" />
+	</bean>
+
+	<bean name="/categorizacionIpress.htm"
+		class="pe.gob.susalud.renipress.controladores.CategorizacionIpressController">
+		<property name="methodNameResolver" ref="paramResolver" />
+	</bean>
+
+	<!-- REPORTES -->
+	<bean name="/reporte.htm"
+		class="pe.gob.susalud.renipress.controladores.ReporteController">
+		<property name="methodNameResolver" ref="paramResolver" />
+	</bean>
+
+	<bean name="/comiteTecnicoCategorizacion.htm"
+		class="pe.gob.susalud.renipress.controladores.reportes.ComiteTecnicoController">
+		<property name="methodNameResolver" ref="paramResolver" />
+	</bean>
+
+	<bean name="/ipressUbicacionGeo.htm"
+		class="pe.gob.susalud.renipress.controladores.reportes.IpressUbicacionGeoController">
+		<property name="methodNameResolver" ref="paramResolver" />
+	</bean>
+
+	<bean name="/listadoEstablecimientosRegistrados.htm"
+		class="pe.gob.susalud.renipress.controladores.reportes.ListadoEstablecimientosRegistradosController">
+		<property name="methodNameResolver" ref="paramResolver" />
+	</bean>
+	
+	<bean name="/estadisticaTramiteProceso.htm"
+		class="pe.gob.susalud.renipress.controladores.reportes.EstadisticaTramiteProcesoController">
+		<property name="methodNameResolver" ref="paramResolver" />
+	</bean>
+
+	<bean name="/evaluacion-categorizacion-resultado.htm"
+		class="pe.gob.susalud.renipress.controladores.CategorizacionResultadoController">
+		<property name="methodNameResolver" ref="paramResolver" />
+	</bean>
+
+	<bean name="/evaluacion-categorizacion-ampliacion-plazo-subsanacion.htm"
+		class="pe.gob.susalud.renipress.controladores.AmpliacionPlazoSubsanacionController">
+		<property name="methodNameResolver" ref="paramResolver" />
+	</bean>
+
+	<bean name="/evaluacion-solicitud-ampliazion-plazo.htm"
+		class="pe.gob.susalud.renipress.controladores.EvaluacionSolicituAmpliacionController">
+		<property name="methodNameResolver" ref="paramResolver" />
+	</bean>
+
+	<bean name="/evaluacion-solicitud-segunda-instancia.htm"
+		class="pe.gob.susalud.renipress.controladores.EvaluacionSolicituAmpliacionSegundaInstanciaController">
+		<property name="methodNameResolver" ref="paramResolver" />
+	</bean>
+
+	<bean name="/segunda-instancia.htm"
+		class="pe.gob.susalud.renipress.controladores.EvaluacionSolicitudSegundaInstanciaController">
+		<property name="methodNameResolver" ref="paramResolver" />
+	</bean>
+
+	<bean name="/evaluacion-categorizacion-programado.htm"
+		class="pe.gob.susalud.renipress.controladores.CategorizacionProgramadoController">
+		<property name="methodNameResolver" ref="paramResolver" />
+	</bean>
+
+	<bean name="/bandeja-solicitudes-categorizacion.htm"
+		class="pe.gob.susalud.renipress.controladores.BandejaSolicitudCategorizacionController">
+		<property name="methodNameResolver" ref="paramResolver" />
+	</bean>
+
+    <!-- JSQP -->
+	<bean name="/categorizacionResolucion.htm"
+		class="pe.gob.susalud.renipress.controladores.CategorizacionResolucionController">
+    <property name="methodNameResolver" ref="paramResolver" />
+	</bean>		
+	 
+	<bean name="/ipressInstitucion.htm"
+		class="pe.gob.susalud.renipress.controladores.reportes.IpressInstitucionController">
+		<property name="methodNameResolver" ref="paramResolver" />
+	</bean>
+	
+	<bean name="/staffProfesionales.htm"
+		class="pe.gob.susalud.renipress.controladores.reportes.StaffProfesionalesController">
+		<property name="methodNameResolver" ref="paramResolver" />
+	</bean>
+	
+	<bean name="/colegio.htm"
+		class="pe.gob.susalud.renipress.controladores.utiles.ColegioController">
+		<property name="methodNameResolver" ref="paramResolver" />
+	</bean>
+	 
+	<bean name="/evaluacion-categorizacion-solicitud.htm"
+		class="pe.gob.susalud.renipress.controladores.CategorizacionEvaluacionSolicitudController">
+		<property name="methodNameResolver" ref="paramResolver" />
+	</bean>
+
+<!-- 	<bean name="/requisitoObservacion.htm" -->
+<!-- 		class="pe.gob.susalud.renipress.controladores.reportes.RequisitoObservacionController"> -->
+<!-- 		<property name="methodNameResolver" ref="paramResolver" />  -->
+<!-- 	</bean> -->
+
+	<bean name="/gestionar-reporte.htm"
+		class="pe.gob.susalud.renipress.controladores.GestionarReporteController">
+		<property name="methodNameResolver" ref="paramResolver" />
+	</bean>
+	
+	<bean name="/ejecutar-reporte.htm"
+		class="pe.gob.susalud.renipress.controladores.GestionarEjecutarReporteController">
+		<property name="methodNameResolver" ref="paramResolver" />
+	</bean>
+	
+	<bean name="/requisitoObservacion.htm"
+		class="pe.gob.susalud.renipress.controladores.reportes.RequisitoObservacionController">
+		<property name="methodNameResolver" ref="paramResolver" /> 
+	</bean>
+	
+	<bean name="/comitesTecnicos.htm"
+		class="pe.gob.susalud.renipress.controladores.CategorizacionConsultaComitesTecnicosController">
+		<property name="methodNameResolver" ref="paramResolver" />
+	</bean>
+	
+	<!-- ACTAS E INFORMES -->
+	<bean name="/categorizacionActasInformes.htm"
+		class="pe.gob.susalud.renipress.controladores.CategorizacionActasInformesController">
+		<property name="methodNameResolver" ref="paramResolver" />
+	</bean>
+	
+	<!-- OPINION PREVIA -->
+	<bean name="/categorizacionOpinionPrevia.htm"
+		class="pe.gob.susalud.renipress.controladores.CategorizacionOpinionPreviaController">
+		<property name="methodNameResolver" ref="paramResolver" />
+	</bean>
+	
+	<!-- CONSULTA EN LINEA - ATENDER CONSULTA -->
+	<bean name="/soporteAtenderConsulta.htm"
+		class="pe.gob.susalud.renipress.controladores.soporteEnLinea.SoporteAtenderConsultaController">
+		<property name="methodNameResolver" ref="paramResolver" />
+	</bean>
+	
+	<!-- CONSULTA EN LINEA - TICKET -->
+	<bean name="/soporteTicket.htm"
+		class="pe.gob.susalud.renipress.controladores.soporteEnLinea.SoporteTicketController">
+		<property name="methodNameResolver" ref="paramResolver" />
+	</bean>
+	
+	<!-- CONSULTA EN LINEA - CONSULTA-->
+	<bean name="/soporteConsulta.htm"
+		class="pe.gob.susalud.renipress.controladores.soporteEnLinea.SoporteConsultaController">
+		<property name="methodNameResolver" ref="paramResolver" />
+	</bean>
+	
+	<!-- MANEJO DE TAB -->
+	<bean name="/evaluacion-categorizacion.htm"
+		class="pe.gob.susalud.renipress.controladores.EvaluacionCategorizacionController">
+		<property name="methodNameResolver" ref="paramResolver" />
+	</bean>
+	
+	<!-- MANEJO DE TAB -->
+	<bean name="/bienvenidos.htm"
+		class="pe.gob.susalud.renipress.controladores.BienvenidosController">
+		<property name="methodNameResolver" ref="paramResolver" />
+	</bean>
+
+	<!-- CERTIFICADO -->
+	<bean name="/categorizacionCertificado.htm"
+		class="pe.gob.susalud.renipress.controladores.CategorizacionCertificadoController">
+		<property name="methodNameResolver" ref="paramResolver" />
+	</bean>	
+	
+	<!-- CERTIFICADO -->
+	<bean name="/verAgenda.htm"
+		class="pe.gob.susalud.renipress.controladores.AgendaController">
+		<property name="methodNameResolver" ref="paramResolver" />
+	</bean>	
+	
+	
+	<!-- HISTORIAL -->
+	<bean name="/historial.htm"
+		class="pe.gob.susalud.renipress.controladores.HistorialController">
+		<property name="methodNameResolver" ref="paramResolver" />
+	</bean>
+	
+	<!-- SUBSANAR -->
+	<bean name="/evaluacion-categorizacion-subsanar.htm"
+		class="pe.gob.susalud.renipress.controladores.CategorizacionSubsanacionController">
+		<property name="methodNameResolver" ref="paramResolver" />
+	</bean>
+	
+	
+	<!-- FORMATO DE RRHH -->
+	<bean name="/formato-rrhh.htm"
+		class="pe.gob.susalud.renipress.controladores.FormatoController">
+		<property name="methodNameResolver" ref="paramResolver" />
+	</bean>
+	
+	<!-- MODULO ACTUALIZACION DE DATOS Y RETIRO DE IPRES POR DLARICO 14/10/2015-->
+        <bean name="/actualizacionRetiro.htm"
+              class="pe.gob.susalud.renipress.controladores.SolActuRetiIpressController">
+		<property name="methodNameResolver" ref="paramResolver" />
+	</bean>
+        <!-- ********************************************************************* -->
+        
+    <!-- ************************************************* -->    
+    <!-- CMIC 18/11/2015 -->
+    
+    <bean name="/ipress.htm"
+              class="pe.gob.susalud.renipress.controladores.IpressController">
+		<property name="methodNameResolver" ref="paramResolver" />
+	</bean>
+    
+    <!-- FIN --> 
+    <!-- ************************************************* -->    
+</beans>

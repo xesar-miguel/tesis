@@ -1,8 +1,17 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>pe.gob.susalud</groupId>
-  <artifactId>renipress</artifactId>
-  <version>1.0.0</version>
-  <packaging>pom</packaging>
-  <name>renipress</name>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>pe.gob.susalud</groupId>
+	<artifactId>renipress</artifactId>
+	<version>1.0.0</version>
+	<packaging>pom</packaging>
+	<modules>
+		<module>../renipress-comun</module>
+		<module>../renipress-dominio</module>
+		<module>../renipress-dao</module>
+		<module>../renipress-negocio</module>
+		<module>../renipress-servicio</module>
+		<module>../renipress-controlador</module>
+		<module>../renipress-webapp</module>
+	</modules>
 </project>
