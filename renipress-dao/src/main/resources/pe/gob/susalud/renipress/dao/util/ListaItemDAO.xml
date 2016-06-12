@@ -1,0 +1,722 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="pe.gob.susalud.renipress.dao.util.ListaItemDAO">
+
+    <cache />
+       
+    <select id="selectTablas" flushCache="true"        
+        resultType="pe.gob.susalud.renipress.comun.beans.ListaItem"
+        parameterType="pe.gob.susalud.renipress.comun.beans.ListaItem"> 
+ 
+        SELECT CO_CODVALOR AS "ID",
+        	   DE_VALOR    AS "LABEL"  
+  		  FROM RNITM_TABLA_TABLAS A
+ 		 INNER JOIN RNITM_TABLA B
+    		ON A.CO_IDTABLA = B.CO_IDTABLA
+    	 <where>
+    	 	<if test="campo != null">
+    	 		AND A.DE_NOMBRECAMPO = #{campo,jdbcType=VARCHAR}
+    	 	</if>
+    	 	<if test="tabla != null">
+    	 		AND B.NO_NOMBRE=#{tabla,jdbcType=VARCHAR}
+    	 	</if>
+    	 </where> 		  		    		 
+    </select>
+    
+    <select id="selectTareaEstadoEstado" flushCache="true"        
+        resultType="pe.gob.susalud.renipress.comun.beans.ListaItem"
+        parameterType="pe.gob.susalud.renipress.comun.beans.ListaItem"> 
+    
+		select a.CO_IDESTADO AS "ID", a.DE_DESCRIPCION AS "LABEL" from rnitm_estado a
+		inner join rnitm_ambito_estado b on a.CO_IDESTADO=b.CO_IDESTADO
+		inner join rnitm_perfil_ambito c on b.TI_TIPOAMBITO=c.TI_TIPOAMBITO
+		where c.CO_IDPERFIL = #{tabla,jdbcType=VARCHAR} and 
+			a.co_idestado in (select co_idestado from rnitv_tarea_estado where co_idtarea=#{campo,jdbcType=VARCHAR})
+
+    </select>
+    
+    <select id="selectTabla" flushCache="true"        
+        resultType="pe.gob.susalud.renipress.comun.beans.ListaItem"
+        parameterType="pe.gob.susalud.renipress.comun.beans.ListaItem"> 
+ 
+        SELECT CO_CODVALOR AS "ID",
+        	   DE_VALOR    AS "LABEL"
+  		  FROM RNITM_TABLA A 		
+ 		 WHERE A.NO_NOMBRE=#{campo,jdbcType=VARCHAR}
+ 		   		 
+    </select>
+    
+    <select id="selectTablas_tablas" flushCache="true"        
+        resultType="pe.gob.susalud.renipress.comun.beans.ListaItem"
+        parameterType="pe.gob.susalud.renipress.comun.beans.ListaItem"> 
+ 
+<!--         SELECT  -->
+<!--             CO_CODVALOR as "ID",             -->
+<!--             DE_VALOR as "LABEL"   -->
+<!--         FROM RNITM_TABLA_TABLAS rtt,RNITM_TABLA rt -->
+<!--         WHERE rtt.DE_NOMBRECAMPO = #{campo,jdbcType=VARCHAR}  -->
+<!--         AND rt.NO_NOMBRE=#{tabla,jdbcType=VARCHAR} -->
+<!--         AND rtt.CO_IDTABLA = rt.CO_IDTABLA -->
+
+        SELECT CO_CODVALOR as "ID",            
+        DE_VALOR as "LABEL"  
+        FROM RNITM_TABLA_TABLAS rtt
+        WHERE CO_IDTABLA IN (        
+        SELECT CO_IDTABLA FROM RNITM_TABLA WHERE NO_NOMBRE ='RNIT_TIPO_ACTIVIDAD')
+ 		 
+    </select>
+ 
+    <select id="selectItem_nivel_complejidad" flushCache="true"        
+        resultType="pe.gob.susalud.renipress.comun.beans.ListaItem"> 
+ 
+        SELECT   CO_CODVALOR as "ID",            
+        DE_VALOR as "LABEL"  
+        FROM RNITM_TABLA_TABLAS rtt
+        WHERE CO_IDTABLA IN (        
+        SELECT CO_IDTABLA FROM RNITM_TABLA WHERE NO_NOMBRE ='RNIT_NIVEL_COMPLEJIDAD')
+        
+    </select>
+    
+    <select id="selectItem_nivel_atencion" flushCache="true"        
+        resultType="pe.gob.susalud.renipress.comun.beans.ListaItem"> 
+ 
+        SELECT   CO_CODVALOR as "ID",            
+        DE_VALOR as "LABEL" 
+        FROM RNITM_TABLA_TABLAS rtt
+        WHERE CO_IDTABLA IN (        
+        SELECT CO_IDTABLA FROM RNITM_TABLA WHERE NO_NOMBRE ='RNIT_NIVEL_ATENCION')
+        
+    </select>
+    
+    <select id="selectRequisitoId" flushCache="true"        
+        resultType="pe.gob.susalud.renipress.comun.beans.ListaItem"
+        parameterType="pe.gob.susalud.renipress.comun.beans.ListaItem"> 
+ 
+        SELECT CO_IDREQUISITO as "ID",
+        de_nombre as "LABEL"
+        from RNITM_REQUISITO
+        where co_idmodulo=#{indice,jdbcType=BIGINT}
+        and co_idrequisito not in(#{indicador,jdbcType=BIGINT})
+    
+    </select>
+ 
+    <select id="selectModulo" flushCache="true"        
+        resultType="pe.gob.susalud.renipress.comun.beans.ListaItem"> 
+ 
+        SELECT 
+        CO_IDMODULO as "ID",
+        DE_NOMBRE as "LABEL" 
+        from RNITM_MODULO
+    
+    </select>   
+    
+    <select id="selectRequisito" flushCache="true"        
+        resultType="pe.gob.susalud.renipress.comun.beans.ListaItem"> 
+ 
+        SELECT CO_IDREQUISITO as "ID",
+        CO_COREQUISITO as "LABEL"
+        from RNITM_REQUISITO
+    
+    </select>
+    
+    
+    
+    <select id="selectNorma_estado" flushCache="true"        
+        resultType="pe.gob.susalud.renipress.comun.beans.ListaItem"> 
+ 
+        SELECT rn.co_idnorma as "ID",
+        rn.DE_NOMBRE||' ('||re.de_descripcion||')' AS "LABEL" 
+        FROM rnitm_norma rn inner join rnitm_estado re 
+        on rn.es_estado=re.co_idestado
+    
+    </select>
+    
+    <select id="selectCategoria_estado" flushCache="true"        
+        resultType="pe.gob.susalud.renipress.comun.beans.ListaItem"> 
+ 
+        SELECT rc.co_idcategoria as "ID",
+        rc.co_codcategoria||'  ('||re.de_descripcion||')' AS "LABEL" 
+        FROM rnitm_categoria rc inner join rnitm_estado re 
+        on rc.es_estado=re.co_idestado
+    </select>
+
+        <select id="selectCategoria_estadosc" flushCache="true"        
+        resultType="pe.gob.susalud.renipress.comun.beans.ListaItem"> 
+ 
+        SELECT rc.co_idcategoria as "ID",
+        rc.co_codcategoria||'  ('||re.de_descripcion||')' AS "LABEL" 
+        FROM rnitm_categoria rc inner join rnitm_estado re 
+        on rc.es_estado=re.co_idestado
+        <where>
+       		<if test="campo != null">
+       			AND rc.co_idcategoria != #{campo,jdbcType=BIGINT}
+       		</if>
+        </where>     
+    </select>
+    
+    
+    <select id="selectAutoridadSanitaria"        
+        resultType="pe.gob.susalud.renipress.comun.beans.ListaItem"> 
+ 
+       SELECT A.CO_IDAUTORIDADSANIT as "ID",
+       TT.DE_VALOR || '-' ||A.DE_NOMBRE as "LABEL" 
+       FROM RNITM_AUTOR_SANITARIA A 
+       INNER JOIN RNITM_TABLA_TABLAS TT 
+       ON A.ti_autoridadsanit = TT.CO_CODVALOR 
+       AND (TT.CO_IDTABLA IN ( SELECT T.CO_IDTABLA  
+                               FROM RNITM_TABLA T 
+                               WHERE T.NO_NOMBRE = 'RNIT_TIPO_AUTOR_SANITARIA'))        
+    	
+    </select>
+    
+    <select id="selectPais"       
+        resultType="pe.gob.susalud.renipress.comun.beans.ListaItem"> 
+ 
+        SELECT
+            CO_IDPAIS as "ID",            
+            DE_DESCRIPCION as "LABEL"           
+        FROM RNITM_PAIS    
+        ORDER BY DE_DESCRIPCION
+    </select>
+    
+    <select id="selectEstados" flushCache="true"       
+        resultType="pe.gob.susalud.renipress.comun.beans.ListaItem"> 
+ 
+        SELECT
+            CO_IDESTADO as "ID",            
+            DE_DESCRIPCION as "LABEL"           
+        FROM RNITM_ESTADO
+       <where>
+       		<if test="campo != null">
+       			AND CO_IDPROCESO = #{campo,jdbcType=VARCHAR}
+       		</if>
+       		<if test="campo == null">
+       			AND CO_IDPROCESO IS NULL
+       		</if>
+       		<if test="tabla != null">
+       			AND TI_ESTADO = #{tabla,jdbcType=VARCHAR}
+       		</if>
+       		<if test="tabla == null">
+       			AND TI_ESTADO IS NULL
+       		</if>
+       </where>       	
+    </select>
+    
+    <select id="selectProceso" flushCache="true"        
+        resultType="pe.gob.susalud.renipress.comun.beans.ListaItem"> 
+ 
+        SELECT
+            CO_IDPROCESO as "ID",            
+            DE_DESCRIPCION as "LABEL"           
+        FROM RNITM_PROCESO    
+    </select>
+    
+    <select id="selectProcesoAbreviatura" flushCache="true"        
+        resultType="pe.gob.susalud.renipress.comun.beans.ListaItem"> 
+ 
+        SELECT
+            CO_IDPROCESO as "ID",            
+            DE_ABREVIATURA as "LABEL"           
+        FROM RNITM_PROCESO 
+        WHERE CO_IDPROCESO = #{campo,jdbcType=VARCHAR}
+    </select>
+    
+    <select id="selectInstitucion" flushCache="true"        
+        resultType="pe.gob.susalud.renipress.comun.beans.ListaItem"> 
+ 
+        SELECT
+            CO_IDPROCESO as "ID",            
+            DE_DESCRIPCION as "LABEL"           
+        FROM RNITM_INSTITUCION
+    </select>
+    
+    <select id="selectProcesoTarea" flushCache="true"        
+        resultType="pe.gob.susalud.renipress.comun.beans.ListaItem"> 
+ 
+        SELECT
+            CO_IDTAREA as "ID",            
+            DE_DESCRIPCION as "LABEL"           
+        FROM RNITM_TAREA    
+        <where>
+       		<if test="campo != null">
+       			AND CO_IDTAREA NOT IN ( #{campo,jdbcType=VARCHAR} )
+       		</if>
+        </where>
+    </select>    
+    
+    <select id="selectProcesoEstado" flushCache="true"        
+        resultType="pe.gob.susalud.renipress.comun.beans.ListaItem"> 
+ 
+        SELECT
+            CO_IDESTADO as "ID",            
+            DE_DESCRIPCION as "LABEL"           
+        FROM RNITM_ESTADO
+        <where>
+       		<if test="campo != null">
+       			AND CO_IDPROCESO = #{campo,jdbcType=VARCHAR}
+       		</if>
+        </where>        
+    </select>    
+    
+    <select id="selectPerfilEstado" flushCache="true"        
+        resultType="pe.gob.susalud.renipress.comun.beans.ListaItem"> 
+ 
+        SELECT 
+        	A.CO_IDESTADO AS "ID",
+        	
+        	(
+	        	SELECT DE_ESTADO FROM rnitm_ambito_estado
+				WHERE ti_tipoambito IN ( 
+					SELECT TI_TIPOAMBITO FROM RNITM_PERFIL_AMBITO
+					WHERE CO_IDPERFIL = A.CO_IDPERFIL
+					AND ROWNUM = 1
+				)
+				AND CO_IDESTADO = B.CO_IDESTADO
+				AND ROWNUM = 1
+        	) AS "LABEL"
+        	
+          	FROM RNITM_PERFIL_ESTADO A 
+		 	INNER JOIN RNITM_ESTADO B
+			ON A.CO_IDESTADO = B.CO_IDESTADO
+		WHERE         
+            	(#{campo,jdbcType=VARCHAR} IS NULL OR A.CO_IDPERFIL  = #{campo,jdbcType=VARCHAR})                       
+            AND (#{tabla,jdbcType=VARCHAR} IS NULL OR B.CO_IDPROCESO = #{tabla,jdbcType=VARCHAR})                       
+            AND A.ES_ESTADO    = 1         
+    </select> 
+    
+    <select id="selectTareaEstado" flushCache="true"        
+        resultType="pe.gob.susalud.renipress.comun.beans.ListaItem"> 
+    	SELECT 
+        	A.CO_IDESTADO AS "ID",
+        	C.DE_ESTADO AS "LABEL"
+		FROM RNITM_ESTADO A
+		inner join RNITV_TAREA_ESTADO B 
+		    on A.CO_IDESTADO=B.CO_IDESTADO
+		inner join rnitm_ambito_estado C 
+		    on B.CO_IDESTADO = C.CO_IDESTADO
+		<where>
+            <if test="campo != null ">
+                 and B.CO_IDTAREA  = #{campo,jdbcType=VARCHAR}
+            </if>
+            and TI_TIPOAMBITO=1
+        </where>
+    </select>
+    
+    <select id="selectEstadoAmbito" flushCache="true"        
+        resultType="pe.gob.susalud.renipress.comun.beans.ListaItem"> 
+    	SELECT 
+    		B.CO_IDESTADO AS "ID",
+    		B.DE_DESCRIPCION AS "LABEL" 
+    	FROM RNITM_PERFIL_ESTADO A
+		INNER JOIN RNITM_ESTADO B
+			ON A.CO_IDESTADO=B.CO_IDESTADO 
+		<where>
+            and A.CO_IDPERFIL=258
+        </where>
+    </select>
+    
+    <select id="selectDistrito" flushCache="true"        
+        resultType="pe.gob.susalud.renipress.comun.beans.ListaItem"> 
+ 
+        SELECT 
+			DISTINCT SUBSTR( CO_INEI, 5 , 2 ) AS "ID",
+			DE_DISTRITO AS "LABEL"
+		FROM RNITM_UBIGEO
+		WHERE SUBSTR( CO_INEI, 0 , 2 ) = #{campo,jdbcType=VARCHAR} 
+		  AND SUBSTR( CO_INEI, 3 , 2 ) = #{tabla,jdbcType=VARCHAR} 
+		ORDER BY 2 
+    </select> 
+    
+    <select id="selectDistritoCodUbigeo" flushCache="true"        
+        resultType="pe.gob.susalud.renipress.comun.beans.ListaItem"> 
+ 
+        SELECT 
+        	DISTINCT co_idubigeo AS "ID",
+        	DE_DISTRITO "LABEL"
+        FROM RNITM_UBIGEO 
+        WHERE SUBSTR( CO_INEI, 0 , 2 ) = #{campo,jdbcType=VARCHAR}
+			AND SUBSTR( CO_INEI, 3 , 2 ) = #{tabla,jdbcType=VARCHAR}
+        ORDER BY 2
+    </select> 
+    
+    
+    
+    <select id="selectProvincia" flushCache="true"        
+        resultType="pe.gob.susalud.renipress.comun.beans.ListaItem"> 
+        SELECT 
+			DISTINCT SUBSTR( CO_INEI, 3 , 2 ) AS "ID",
+			DE_PROVINCIA AS "LABEL"
+		FROM RNITM_UBIGEO
+		WHERE SUBSTR( CO_INEI, 0 , 2 ) = #{campo,jdbcType=VARCHAR} 
+		ORDER BY 2  
+    </select> 
+    
+    <select id="selectDepartamento" flushCache="true"        
+        resultType="pe.gob.susalud.renipress.comun.beans.ListaItem"> 
+        SELECT 
+			DISTINCT SUBSTR( CO_INEI, 0 , 2 ) AS "ID",
+			DE_DEPARTAMENTO AS "LABEL"
+		FROM RNITM_UBIGEO 		
+		WHERE CO_INEI IS NOT NULL AND DE_DEPARTAMENTO IS NOT NULL
+		AND CO_INEI IN (SELECT CO_UBIGEO FROM RNITM_AUTOR_SANITARIA_UBIGEO
+						<where>
+							<if test="campo != null">
+								CO_IDAUTORSANITARIA = #{campo,jdbcType=VARCHAR}						
+							</if>
+						</where>                        
+                        )
+		ORDER BY 2  
+    </select>
+    
+    <select id="selectDepartamentos" flushCache="true"        
+    resultType="pe.gob.susalud.renipress.comun.beans.ListaItem"> 
+    SELECT 
+	DISTINCT SUBSTR( CO_INEI, 0 , 2 ) AS "ID",
+	DE_DEPARTAMENTO AS "LABEL"
+	FROM RNITM_UBIGEO 		
+	WHERE CO_INEI IS NOT NULL AND DE_DEPARTAMENTO IS NOT NULL
+	ORDER BY DE_DEPARTAMENTO ASC
+    </select> 
+     
+    
+    
+    <select id="selectTablaID" flushCache="true"        
+        resultType="pe.gob.susalud.renipress.comun.beans.ListaItem"
+        parameterType="pe.gob.susalud.renipress.comun.beans.ListaItem"> 
+ 
+        SELECT CO_IDTABLA  AS "ID",
+        	   NO_NOMBRE   AS "LABEL"
+  		  FROM RNITM_TABLA A 		
+ 		 WHERE A.NO_NOMBRE=#{campo,jdbcType=VARCHAR}
+ 		   		 
+    </select>
+    
+    <select id="selectInstituciones" flushCache="true"        
+        resultType="pe.gob.susalud.renipress.comun.beans.ListaItem"> 
+ 
+        SELECT
+            CO_IDINSTITUCION as "ID",            
+            DE_DESCRIPCION as "LABEL"           
+        FROM RNITM_INSTITUCION
+        <where>
+       		<if test="campo != null">
+       			AND CO_IDINSTITUCION = #{campo,jdbcType=VARCHAR}
+       		</if>
+        </where>        
+    </select>
+
+    
+    <select id="selectUnidadEjecutora" flushCache="true"        
+        resultType="pe.gob.susalud.renipress.comun.beans.ListaItem"
+        parameterType="pe.gob.susalud.renipress.comun.beans.ListaItem"> 
+ 
+        SELECT
+            UE.CO_IDUNIDADEJE as "ID",            
+            UE.DE_DESCRIPCION as "LABEL"           
+        FROM RNITM_UNIDAD_EJECUTORA UE
+ 		<where>
+       		<if test="campo != null">
+       			AND UE.CO_IDAUTORSANIT = #{campo,jdbcType=BIGINT}
+       		</if>
+        </where>  
+    </select>
+    
+    <select id="selectCategoria" flushCache="true"        
+        resultType="pe.gob.susalud.renipress.comun.beans.ListaItem"> 
+ 
+        SELECT co_idcategoria as "ID",
+               co_codcategoria as "LABEL" 
+        FROM rnitm_categoria
+        <where>
+       		<if test="campo != null">
+       			AND co_idcategoria = #{campo,jdbcType=BIGINT}
+       		</if>
+        </where>   
+    
+    </select>
+    
+    <select id="selectCategoriaOpinion" flushCache="true"        
+        resultType="pe.gob.susalud.renipress.comun.beans.ListaItem"> 
+ 
+        SELECT co_idcategoria as "ID",
+               co_codcategoria as "LABEL" 
+        FROM rnitm_categoria
+        <where>
+       		<if test="campo != null">
+       			AND IN_FLAGOPIPREVIA = #{campo,jdbcType=BIGINT}
+       		</if>
+        </where>   
+    
+    </select>
+    
+    
+    <select id="selectCategoriaAsignadaAct" flushCache="true"        
+        resultType="pe.gob.susalud.renipress.comun.beans.ListaItem"> 
+ 
+        SELECT c.co_idcategoria as "ID",
+               c.co_codcategoria as "LABEL" 
+        FROM rnitv_solicitud s inner join rnitm_categoria c
+        on s.CO_IDCATEGASIGNADACT=c.co_idcategoria
+        where s.CO_IDSOLICITUD = #{campo,jdbcType=BIGINT}
+    </select>
+    
+    
+    <select id="selectRedPorId" flushCache="true"        
+        resultType="pe.gob.susalud.renipress.comun.beans.RedBean"
+        parameterType="pe.gob.susalud.renipress.comun.beans.ListaItem"> 
+ 
+        SELECT
+            R.CO_IDRED AS "IDRED",
+            TRIM(R.CO_CODRED) AS "CODRED",            
+            R.DE_NOMBRE As "NOMBRE"           
+        FROM RNITM_RED R
+ 		<where>
+       		<if test="campo != null">
+       			AND R.CO_IDRED = #{campo,jdbcType=BIGINT}
+       		</if>
+        </where>  
+    </select>
+    
+    <select id="selectRed" flushCache="true"        
+        resultType="pe.gob.susalud.renipress.comun.beans.ListaItem"
+        parameterType="pe.gob.susalud.renipress.comun.beans.ListaItem"> 
+ 
+        SELECT
+            R.CO_IDRED as "ID",            
+            R.DE_NOMBRE as "LABEL"           
+        FROM RNITM_RED R
+ 		<where>
+       		<if test="campo != null">
+       			AND R.CO_IDAUTOR_SANITARIA = #{campo,jdbcType=BIGINT}
+       		</if>
+        </where>  
+    </select>
+    
+    <select id="selectMicroRed" flushCache="true"        
+        resultType="pe.gob.susalud.renipress.comun.beans.ListaItem"
+        parameterType="pe.gob.susalud.renipress.comun.beans.ListaItem"> 
+ 
+        SELECT
+            MR.CO_IDMICRORED as "ID",            
+            MR.DE_DESCRIPCION as "LABEL"           
+        FROM RNITM_MICRORED MR
+        WHERE 
+	        MR.CO_IDAUTOR_SANITARIA = #{campo,jdbcType=BIGINT} AND
+	        MR.CO_CODRED = #{tabla,jdbcType=VARCHAR}	
+<!--  		<where> -->
+<!--        		<if test="campo != null"> -->
+<!--        			AND MR.CO_IDAUTOR_SANITARIA = #{campo,jdbcType=BIGINT} -->
+<!--        		</if> -->
+<!--        		<if test="tabla != null"> -->
+<!--     	 		AND MR.CO_CODRED = #{tabla,jdbcType=VARCHAR} -->
+<!--     	 	</if> -->
+<!--         </where>   -->
+		ORDER BY 2
+    </select>
+    
+        <select id="selectReglaByNorma" flushCache="true"        
+        resultType="pe.gob.susalud.renipress.comun.beans.ListaItem"
+        parameterType="pe.gob.susalud.renipress.comun.beans.ListaItem"> 
+ 
+        SELECT DISTINCT
+        	B.CO_IDCATEGORIA as "ID", 
+        	B.DE_NOMBRE as "LABEL",
+        	B.NU_ORDEN 
+        FROM RNITV_REGLA A
+		INNER JOIN RNITM_CATEGORIA B on A.CO_IDCATEGORIA=B.CO_IDCATEGORIA
+ 		<where>
+       		<if test="campo != null">
+       			AND A.CO_IDNORMA = #{campo,jdbcType=BIGINT}
+       		</if>
+       		AND A.ES_ESTADO = 1
+        </where>
+        ORDER BY 3,2  
+    </select>
+    
+    <select id="selectObtUsuAutoSanitaria" flushCache="true" 
+    resultType="pe.gob.susalud.renipress.comun.beans.ListaItem"
+        parameterType="pe.gob.susalud.renipress.comun.beans.ListaItem">
+		select 
+		distinct b.CO_IDAUTORSANIT as "ID"
+		,a.DE_NOMBRE as "LABEL" 
+		from RNITM_AUTOR_SANITARIA a
+		inner join AWTD_USUARIO_AUTORIDADSANIT b
+		on a.CO_IDAUTORIDADSANIT=b.CO_IDAUTORSANIT
+		<where>
+       		<if test="campo != null">
+       			AND b.CO_IDUSUARIO= #{campo,jdbcType=BIGINT}
+       		</if>
+       		<if test="tabla != null">
+       			AND b.CO_IDPERFIL= #{tabla,jdbcType=BIGINT}
+       		</if>
+       		AND A.ES_ESTADO=1
+       		AND B.IN_ACTIVO=1
+        </where>  
+    </select>
+    
+    <select id="selectTablas_tipoDocumento" flushCache="true"        
+        resultType="pe.gob.susalud.renipress.comun.beans.ListaItem"
+        parameterType="pe.gob.susalud.renipress.comun.beans.ListaItem">
+        SELECT CO_CODVALOR as "ID",            
+        DE_VALOR as "LABEL"  
+        FROM RNITM_TABLA_TABLAS rtt
+        WHERE CO_IDTABLA IN (        
+        SELECT CO_IDTABLA FROM RNITM_TABLA WHERE NO_NOMBRE = 'RNIT_TIPO_DOCUMENTO')
+    </select>
+    
+    <select id="selectIpress" flushCache="true"        
+        resultType="pe.gob.susalud.renipress.comun.beans.ListaItem"
+        parameterType="pe.gob.susalud.renipress.comun.beans.ListaItem"> 
+ 		SELECT CO_IDIPRESS AS "ID",NVL(NO_RAZONSOCIALESTABL,DE_RAZONSOCIALPROP) AS "LABEL" 
+ 		FROM RNITM_IPRESS
+ 		<where> 1=1
+       		<if test="campo != null">
+       			AND US_USUAREG = #{campo,jdbcType=VARCHAR}
+       		</if>
+       		AND ES_ESTADO = 1
+        </where>
+        ORDER BY 2  
+    </select>
+    
+    <select id="selectUPSS" flushCache="true"        
+        resultType="pe.gob.susalud.renipress.comun.beans.ListaItem"
+        parameterType="pe.gob.susalud.renipress.comun.beans.ListaItem"> 
+        
+ 		SELECT CO_IDUPSS AS "ID",DE_NOMBRE AS "LABEL" FROM RNITM_UPSS
+ 		<where> 1=1
+       		<if test="campo != null">
+       			AND US_USUAREG = #{campo,jdbcType=VARCHAR}
+       		</if>
+       		AND ES_ESTADO = 1
+        </where>
+        ORDER BY 2  
+    </select>
+    
+    <select id="selectColegio" flushCache="true"        
+        resultType="pe.gob.susalud.renipress.comun.beans.ListaItem"
+        parameterType="pe.gob.susalud.renipress.comun.beans.ListaItem"> 
+        
+ 		SELECT CO_IDCOLEGPROF AS "ID",DE_DESCRIPCION AS "LABEL" FROM RNITM_COLEGIO_PROF
+ 		<where> 1=1
+       		<if test="campo != null">
+       			AND US_USUAREG = #{campo,jdbcType=VARCHAR}
+       		</if>
+        </where>
+        ORDER BY 2  
+    </select>
+    
+    <select id="selectEspecialidad" flushCache="true"        
+        resultType="pe.gob.susalud.renipress.comun.beans.ListaItem"
+        parameterType="pe.gob.susalud.renipress.comun.beans.ListaItem"> 
+        
+ 		SELECT CO_IDESPECIALIDAD AS "ID",DE_DESCRIPCION AS "LABEL" FROM RNITM_ESPECIALIDAD
+ 		<where> 1=1
+       		<if test="campo != null">
+       			AND CO_IDCOLEGPROF = #{campo,jdbcType=VARCHAR}
+       		</if>
+        </where>
+        ORDER BY 2  
+    </select>
+    <select id="selectSoliReporte" flushCache="true"
+    	resultType="pe.gob.susalud.renipress.comun.beans.ListaItem"
+        parameterType="pe.gob.susalud.renipress.comun.beans.ListaItem">
+        SELECT CO_IDSOLICREPORT AS "ID", NO_REPORTE AS "LABEL" FROM RNITV_SOLICITUD_REPORTE
+        <where>
+        	<if test="indice != null">
+        		AND ES_ESTADOSOL = #{indice, jdbcType=BIGINT}
+        	</if>
+        	<if test="tabla != null and campo != null">
+        		AND ES_ESTADOSOL IN (#{tabla, jdbcType=VARCHAR}, #{campo, jdbcType=VARCHAR})
+        	</if>
+        	<if test="codigo != null">
+        		AND CO_IDAUTORSANIT = #{codigo, jdbcType=BIGINT}
+        	</if>
+        	<if test="indicador == null">
+        		AND ES_ESTADOREPORT = 1
+        	</if>
+        </where>
+    </select>
+    <select id="selectTareaSiguiente" flushCache="true"        
+        resultType="pe.gob.susalud.renipress.comun.beans.ListaItem"
+        parameterType="pe.gob.susalud.renipress.comun.beans.ListaItem"> 
+ 
+        SELECT CO_IDTAREASIG AS "ID" ,
+        	   '' AS "LABEL"
+        FROM RNITV_TAREA_ESTADO A		 
+    	 <where>
+    	 	<if test="campo != null">
+    	 		AND A.CO_IDTAREA = #{campo,jdbcType=VARCHAR}
+    	 	</if>
+    	 	<if test="tabla != null">
+    	 		AND A.CO_IDESTADO = #{tabla,jdbcType=VARCHAR}
+    	 	</if>
+    	 </where> 		  		    		 
+    </select>
+    <select id="selectEstadoSiguiente" flushCache="true"        
+        resultType="pe.gob.susalud.renipress.comun.beans.ListaItem"
+        parameterType="pe.gob.susalud.renipress.comun.beans.ListaItem"> 
+ 
+        SELECT CO_IDESTADO AS "ID" ,
+        	   '' AS "LABEL"
+        FROM RNITV_TAREA_ESTADO A		 
+    	 <where>
+    	 	<if test="campo != null">
+    	 		AND A.CO_IDTAREA = #{campo,jdbcType=VARCHAR}
+    	 	</if>
+    	 	<if test="tabla != null">
+    	 		AND A.CO_IDESTADO = #{tabla,jdbcType=VARCHAR}
+    	 	</if>
+    	 </where> 		  		    		 
+    </select>
+    
+    <select id="selectEstadoVisita" flushCache="true"        
+        resultType="pe.gob.susalud.renipress.comun.beans.ListaItem"> 
+        SELECT co_codValor ID,
+        de_valor LABEL
+		FROM RNITM_TABLA_TABLAS
+		WHERE CO_IDTABLA = 144
+    </select>
+    
+    <select id="selectCargoUsuario" flushCache="true"        
+        resultType="pe.gob.susalud.renipress.comun.beans.ListaItem"
+        parameterType="pe.gob.susalud.renipress.comun.beans.ListaItem"> 
+ 
+        SELECT TI_CARGO AS "ID" ,
+        	   '' AS "LABEL"
+       	FROM rnitv_equipo_oper_integ
+		WHERE co_idequipooper IN ( 
+		SELECT co_idequipooper FROM rnitv_equipo_operativo
+		WHERE CO_IDSOLICITUD  = #{campo,jdbcType=VARCHAR} AND ti_equipooper = 1
+		) AND CO_IDPERSONA IN ( SELECT CO_IDPERSONA FROM rnitM_persona P WHERE p.nu_doc = #{tabla,jdbcType=VARCHAR} )
+		AND ES_ESTADO = 1		 
+		    	 		  		    		 
+    </select>
+    
+    <!-- Adiconado por dlarico -->
+    <select id="selectTipoSolicitud" flushCache="true" 
+            resultType="pe.gob.susalud.renipress.comun.beans.ListaItem">
+            SELECT 
+                CO_IDPROCESO as "ID",
+                DE_DESCRIPCION as "LABEL"
+            FROM RNITM_PROCESO
+            WHERE CO_IDPROCESO IN (3,4)
+    </select>
+    <select id="selectTipoSolicitudAll" flushCache="true" 
+            resultType="pe.gob.susalud.renipress.comun.beans.ListaItem">
+            SELECT 
+                CO_IDPROCESO as "ID",
+                DE_DESCRIPCION as "LABEL"
+            FROM RNITM_PROCESO            
+    </select>
+    <select id="selectSexo" flushCache="true"        
+        resultType="pe.gob.susalud.renipress.comun.beans.ListaItem"> 
+        SELECT 
+            b.CO_CODVALOR AS "ID", 
+            b.DE_VALOR AS "LABEL"
+        FROM RNITM_TABLA_TABLAS b 
+        where b.CO_IDTABLA = 2  
+	ORDER BY 1 
+    </select>
+    
+</mapper>

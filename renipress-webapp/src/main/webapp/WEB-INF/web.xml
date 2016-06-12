@@ -8,8 +8,7 @@
   <context-param>
     <param-name>contextConfigLocation</param-name>
     <param-value>
-			WEB-INF/config/renipress-config-app.xml 
-			WEB-INF/config/applicationContext-jcaptcha.xml
+			WEB-INF/config/renipress-config-app.xml
     	</param-value>
   </context-param>
   

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="pe.gob.susalud.renipress.dao.grilla.BandejaDAO">
+
+    <resultMap id="bandAprobarPlanCategorizador" type="pe.gob.susalud.renipress.dominio.bandeja.BandejaAprobarPlanCategorizadorBean" >        
+        <result column="NU_ROW" property="row" jdbcType="BIGINT"/>
+        <result column="DE_CODIGOTRAMITE" property="codigoTramite" jdbcType="VARCHAR"/>
+        <result column="DE_DENOMINACION" property="denominacion" jdbcType="VARCHAR"/>
+        <result column="DE_RUC" property="ruc" jdbcType="VARCHAR"/>
+        <result column="DE_AUTORIDADSANITARIA" property="autoridadSanitaria" jdbcType="VARCHAR"/>        
+        <result column="DE_DEPARTAMENTO" property="departamento" jdbcType="VARCHAR"/>
+        <result column="DE_PROVINCIA" property="provincia" jdbcType="VARCHAR"/>
+        <result column="DE_DISTRITO" property="distrito" jdbcType="VARCHAR"/>
+        <result column="FE_FECHAINI" property="fechaini" jdbcType="DATE"/>
+        <result column="FE_FECHAFIN" property="fechafin" jdbcType="DATE"/>
+        <result column="NU_CATEGORIZADORES" property="categorizadores" jdbcType="BIGINT"/>
+        <result column="NU_PLAN" property="plan" jdbcType="BIGINT"/>
+    </resultMap>
+   
+    <select id="selectBandejaAprobarPlanCategorizador" 
+    	parameterType="java.util.Map" statementType="CALLABLE">
+			{							    		 
+    			CALL RNIPK_BANDEJA.RNISP_BAND_APROBAR_PLAN    							   
+    			(
+    				#{filtrar, mode=IN, jdbcType=VARCHAR},
+    				#{autoridadSanitaria, mode=IN, jdbcType=BIGINT},
+            		#{departamento, mode=IN, jdbcType=VARCHAR},
+            		#{provincia, mode=IN, jdbcType=VARCHAR},
+            		#{distrito, mode=IN, jdbcType=VARCHAR},   
+            		#{fd_caducidad, mode=IN, jdbcType=DATE},
+            		#{fd_caducidad, mode=IN, jdbcType=DATE},            		
+            		#{first, mode=IN, jdbcType=BIGINT},
+            		#{last, mode=IN, jdbcType=BIGINT},
+            		#{p_nColum, mode=IN, jdbcType=BIGINT},
+            		#{p_vDir, mode=IN, jdbcType=VARCHAR},
+            		#{p_nCount, mode=OUT, jdbcType=BIGINT},              		         		
+            		#{p_crCURSOR, jdbcType=CURSOR, mode=OUT, javaType=java.sql.ResultSet, resultMap=bandConsultaSolCateg}            		            		
+    			)    		 	
+    		}
+    </select>
+  
+</mapper>

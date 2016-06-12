@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration status="WARN">
+	<Properties>
+		<Property name="log-path">/data/logs/</Property>
+	</Properties>
+	<appenders>
+		<Console name="Console" target="SYSTEM_OUT">
+			<PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%5p] (%F:%M:%L)%n%m%n%n" />
+		</Console>
+		<RollingFile name="DAILY" fileName="${log-path}/categorizacion.log"
+			filePattern="${log-path}/categorizacion/categorizacion-%d{yyyy-MM-dd}.log">
+			<PatternLayout>
+				<pattern>[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n
+				</pattern>
+			</PatternLayout>
+			<Policies>
+				<TimeBasedTriggeringPolicy interval="1"
+					modulate="true" />
+			</Policies>
+		</RollingFile>
+	</appenders>
+	<loggers>
+		<root level="trace">
+			<appender-ref ref="Console" level="trace" />
+			<appender-ref ref="DAILY" level="trace" />
+		</root>
+		<logger name="org.springframework.*" level="debug" additivity="false">
+			<appender-ref ref="DAILY" />
+		</logger>
+		
+	</loggers>
+</configuration>
